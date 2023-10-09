@@ -20,9 +20,12 @@ import java.util.Scanner;
 public class AdopetConsoleApplication {
 
     public static void main(String[] args) {
+
         AbrigoService abrigoService = new AbrigoService();
         PetService petService = new PetService();
+
         System.out.println("##### BOAS VINDAS AO SISTEMA ADOPET CONSOLE #####");
+
         try {
             int opcaoEscolhida = 0;
             while (opcaoEscolhida != 5) {
@@ -58,27 +61,6 @@ public class AdopetConsoleApplication {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-
-    private static HttpResponse<String> dispararRequisicaoGET(HttpClient client, String uri) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(uri))
-                .method("GET", HttpRequest.BodyPublishers.noBody())
-                .build();
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
-
-    }
-
-    private static HttpResponse<String> dispararRequisicaoPOST(HttpClient client, String uri, JsonObject json)throws IOException, InterruptedException{
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(uri))
-                .header("Content-Type", "application/json")
-                .method("POST", HttpRequest.BodyPublishers.ofString(json.toString()))
-                .build();
-
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
 }
