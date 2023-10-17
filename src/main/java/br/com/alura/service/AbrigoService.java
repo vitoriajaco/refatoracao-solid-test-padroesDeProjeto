@@ -1,6 +1,7 @@
 package br.com.alura.service;
 
 import br.com.alura.client.ClientHttpConfiguration;
+import br.com.alura.domain.Abrigo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -19,11 +20,6 @@ public class AbrigoService {
         this.client = client;
     }
 
-
-    //Ao aplicar o Single Responsibility Principle para refatoração o método que antes
-    // era private muda para public para que possa ser usado e visualizado em outra classe
-
-    //O metodo tambem deixa de ser STATIC porque nao sao mais chamados dentro de uma classe main()
     public void cadastrarAbrigo() throws IOException, InterruptedException {
         System.out.println("Digite o nome do abrigo:");
         String nome = new Scanner(System.in).nextLine();
@@ -32,14 +28,11 @@ public class AbrigoService {
         System.out.println("Digite o email do abrigo:");
         String email = new Scanner(System.in).nextLine();
 
-        JsonObject json = new JsonObject();
-        json.addProperty("nome", nome);
-        json.addProperty("telefone", telefone);
-        json.addProperty("email", email);
+        Abrigo abrigo = new Abrigo(nome, email, telefone);
 
 
         String uri = "http://localhost:8080/abrigos";
-        HttpResponse<String> response = client.dispararRequisicaoPOST( uri, json);
+        HttpResponse<String> response = client.dispararRequisicaoPOST( uri, abrigo);
         int statusCode = response.statusCode();
         String responseBody = response.body();
         if (statusCode == 200) {
@@ -66,8 +59,6 @@ public class AbrigoService {
             System.out.println(id + " - " + nome);
         }
     }
-
-    //O metodo tambem deixa de ser STATIC porque nao sao mais chamados dentro de uma classe main()
 
 
 }
