@@ -11,21 +11,20 @@ import java.net.http.HttpResponse;
 
 public class ClientHttpConfiguration {
 
-   public HttpResponse<String> dispararRequisicaoGET(String uri) throws IOException, InterruptedException {
-       HttpClient client = HttpClient.newHttpClient();
+    public HttpResponse<String> dispararRequisicaoGET(String uri) throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
 
-       HttpRequest request = HttpRequest.newBuilder()
+        HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         return client.send(request, HttpResponse.BodyHandlers.ofString());
-
     }
 
-    public HttpResponse<String> dispararRequisicaoPOST(String uri, Object object)throws IOException, InterruptedException{
+    public HttpResponse<String> dispararRequisicaoPOST(String uri, Object object) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
 
-       HttpRequest request = HttpRequest.newBuilder()
+        HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header("Content-Type", "application/json")
                 .method("POST", HttpRequest.BodyPublishers.ofString(new Gson().toJson(object)))

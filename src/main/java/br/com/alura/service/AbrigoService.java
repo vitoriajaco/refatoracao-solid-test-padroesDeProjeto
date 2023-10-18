@@ -3,10 +3,12 @@ package br.com.alura.service;
 import br.com.alura.client.ClientHttpConfiguration;
 import br.com.alura.domain.Abrigo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
-
 import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.List;
@@ -16,8 +18,22 @@ public class AbrigoService {
 
     private ClientHttpConfiguration client;
 
-    public AbrigoService (ClientHttpConfiguration client){
+    public AbrigoService(ClientHttpConfiguration client) {
         this.client = client;
+    }
+
+    public void listarAbrigo() throws IOException, InterruptedException {
+        String uri = "http://localhost:8080/abrigos";
+        HttpResponse<String> response = client.dispararRequisicaoGET(uri);
+        String responseBody = response.body();
+        Abrigo[] abrigos = new ObjectMapper().readValue(responseBody, Abrigo[].class);
+        List<Abrigo> abrigoList = Arrays.stream(abrigos).toList();
+        System.out.println("Abrigos cadastrados:");
+        for (Abrigo abrigo : abrigoList) {
+            long id = abrigo.getId();
+            String nome = abrigo.getNome();
+            System.out.println(id +" - " +nome);
+        }
     }
 
     public void cadastrarAbrigo() throws IOException, InterruptedException {
@@ -28,11 +44,10 @@ public class AbrigoService {
         System.out.println("Digite o email do abrigo:");
         String email = new Scanner(System.in).nextLine();
 
-        Abrigo abrigo = new Abrigo(nome, email, telefone);
-
+        Abrigo abrigo = new Abrigo(nome, telefone, email);
 
         String uri = "http://localhost:8080/abrigos";
-        HttpResponse<String> response = client.dispararRequisicaoPOST( uri, abrigo);
+        HttpResponse<String> response = client.dispararRequisicaoPOST(uri, abrigo);
         int statusCode = response.statusCode();
         String responseBody = response.body();
         if (statusCode == 200) {
@@ -42,24 +57,5 @@ public class AbrigoService {
             System.out.println("Erro ao cadastrar o abrigo:");
             System.out.println(responseBody);
         }
-
     }
-
-    public void listarAbrigo() throws IOException, InterruptedException {
-
-        String uri = "http://localhost:8080/abrigos";
-        HttpResponse<String> response = client.dispararRequisicaoGET(uri);
-        String responseBody = response.body();
-        Abrigo[] abrigos = new ObjectMapper().readValue(responseBody, Abrigo[].class); //Vai fazer a leitura do Json feita no ResponseBody e ira transformar em um Array de Abrigos
-        List<Abrigo> abrigoList = Arrays.stream(abrigos).toList();
-        System.out.println("Abrigos cadastrados:");
-        for (Abrigo abrigo : abrigoList) {
-
-            long id = abrigo.getId();
-            String nome = abrigo.getNome();
-            System.out.println(id + " - " + nome);
-        }
-    }
-
-
 }
