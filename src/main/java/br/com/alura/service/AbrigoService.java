@@ -3,10 +3,7 @@ package br.com.alura.service;
 import br.com.alura.client.ClientHttpConfiguration;
 import br.com.alura.domain.Abrigo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
 
 import java.io.IOException;
 
@@ -51,7 +48,7 @@ public class AbrigoService {
     public void listarAbrigo() throws IOException, InterruptedException {
 
         String uri = "http://localhost:8080/abrigos";
-        HttpResponse<String> response = client.dispararRequisicaoGET( uri);
+        HttpResponse<String> response = client.dispararRequisicaoGET(uri);
         String responseBody = response.body();
         Abrigo[] abrigos = new ObjectMapper().readValue(responseBody, Abrigo[].class); //Vai fazer a leitura do Json feita no ResponseBody e ira transformar em um Array de Abrigos
         List<Abrigo> abrigoList = Arrays.stream(abrigos).toList();

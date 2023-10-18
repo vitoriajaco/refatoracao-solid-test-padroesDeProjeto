@@ -13,6 +13,7 @@ public class ClientHttpConfiguration {
 
    public HttpResponse<String> dispararRequisicaoGET(String uri) throws IOException, InterruptedException {
        HttpClient client = HttpClient.newHttpClient();
+
        HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .method("GET", HttpRequest.BodyPublishers.noBody())
@@ -23,6 +24,7 @@ public class ClientHttpConfiguration {
 
     public HttpResponse<String> dispararRequisicaoPOST(String uri, Object object)throws IOException, InterruptedException{
         HttpClient client = HttpClient.newHttpClient();
+
        HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header("Content-Type", "application/json")
