@@ -22,7 +22,7 @@ public class AbrigoServiceTest {
     private Abrigo abrigo = new Abrigo("Teste", "61981880392", "abrigo_alura@gmail.com");
 
     @Test
-    public void deveVerificarSeDispararRequisicaoGetSeraChamado() throws IOException, InterruptedException {
+    public void deveVerificarQuandoHaAbrigo() throws IOException, InterruptedException {
         abrigo.setId(0L);
         String expectedAbrigosCadastrados = "Abrigos cadastrados:";
         String expectedIdENome = "0 - Teste";
@@ -45,6 +45,29 @@ public class AbrigoServiceTest {
         Assertions.assertEquals(expectedIdENome, actualIdENome);
     }
 
+
+    @Test
+    public void deveVerificarQuandoNaoHaAbrigo() throws IOException, InterruptedException {
+        abrigo.setId(0L);
+        String expected = "Não há abrigo cadastrado";
+
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(); //Ao chamar a função pelo teste, ele vai pegar todos os retornos do System.out.println.
+        // Para isso, precisamos pegar como um ByteArrayOutputStream(). Por isso, temos uma instância que é um array de bytes chamado baos, que é como pegamos o retorno do System.out.println, do método listarAbrigo()
+        PrintStream printStream = new PrintStream(baos); //Criamos uma instância de PrintStream, que é para escrever no array de bytes. E também configuramos este printSream, que está sendo escrito no nosso array de bytes, no setOut().
+        System.setOut(printStream);
+
+        when(response.body()).thenReturn("[]"); // aqui fica vazio pq está simulado que a lista volta vazio
+        when(client.dispararRequisicaoGET(anyString())).thenReturn(response);
+
+        abrigoService.listarAbrigo();
+
+        String[] lines = baos.toString().split(System.lineSeparator()); //Dentro do array de bytes baos que contém as duas strings que retornam no System.out.println, devemos pegar o actualAbrigosCadastrados no espaço 0 do array. Ou seja, a mesma mensagem de "Abrigos cadastrados" para o teste passar.
+        String actual = lines[0];
+
+        Assertions.assertEquals(expected, actual);
+
+    }
 
 
 }
